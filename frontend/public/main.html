@@ -1,8 +1,37 @@
-<h1>CS 179I: Project #6</h1>
-<div>
-    <img width="450" height="300"
-        src="https://thumbs.dreamstime.com/b/young-black-family-embracing-outdoors-smiling-camera-young-black-family-embracing-outdoors-smiling-camera-119401418.jpg">
+<div class="root">
+    <h1>Image Analyzer</h1>
+    <div class="mb-3">
+        <div style="float:left">
+            <div class="image-container mb-2">
+                <img width="450" height="300"
+                    src="https://thumbs.dreamstime.com/b/young-black-family-embracing-outdoors-smiling-camera-young-black-family-embracing-outdoors-smiling-camera-119401418.jpg">
+            </div>
+            <div style="width:450px; text-align: center;">
+                <input id="hidden-button" style="display: none;" type="file" id="img" name="img" accept="image/*">
+                <button id="upload-button" style="margin-left: auto; margin-right: auto;" type="button" class="btn btn-outline-dark">Upload Image</button>
+                <button class="btn btn-primary">Detect!</button>
+            </div>
+        </div>
+        <div class="filters">
+            <h5>Detect:</h5>
+            <div>
+                <p><input type="checkbox" style="margin-right:8px">Faces</p>
+            </div>
+            <div>
+                <p><input type="checkbox" style="margin-right:8px">Gender</p>
+            </div>
+            <div>
+                <p><input type="checkbox" style="margin-right:8px">Age</p>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <button>Detect Faces</button>
-</div>
+
+
+<script language="javascript" src="main.js"></script>
+<link rel="stylesheet" type="text/css" href="/main.css" />
+
+
+<!-- bootstrap stuff -->
+<script language="javascript" src="js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css"/>
