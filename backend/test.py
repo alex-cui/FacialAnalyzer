@@ -1,5 +1,6 @@
 import cv2 as cv
-import mtcnn
+import mtcnn as mt
+from matplot lib import pyplot
 
 image_number = 0
 
@@ -14,6 +15,7 @@ def image_text():
     image_number += 1
     return text
 
+model = mt(weights_file = 'test.txt')
 
 classifier = cv.CascadeClassifier('haarcascade_frontalface_default.xml')
 
