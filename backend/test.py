@@ -7,12 +7,6 @@ import os
 import numpy as np
 from mtcnn.mtcnn import MTCNN
 
-import keras
-from keras.models import Sequential
-from keras.layers import Dense, Conv2D , MaxPool2D , Flatten , Dropout 
-from keras.preprocessing.image import ImageDataGenerator
-from keras.optimizers import Adam
-
 labels = ['baby', 'child','youth', 'middle_aged', 'senior']
 image_size = 300
 def get_data(data_dir):
@@ -33,8 +27,6 @@ def get_data(data_dir):
 l = []
 
 
-
-
 image_number = 0
 
 def image_text():
@@ -48,12 +40,12 @@ def image_text():
     image_number += 1
     return text
 
-classifier = cv.CascadeClassifier('haarcascade_frontalface_default.xml')
+# classifier = cv.CascadeClassifier('haarcascade_frontalface_default.xml')
 
 # time_spent = 0
 # cv.setUseOptimized(False)
 # for i in range(10):
-#     pixels = cv.imread(image_text(), 0)
+#     pixels = cv.imread(image_text())
 #     interval = cv.getTickCount()
 #     bboxes = classifier.detectMultiScale(pixels)
 
@@ -78,16 +70,13 @@ def draw_faces(filename, result_list):
         pyplot.imshow(data[y1:y2, x1:x2])
     pyplot.show()
 
-
-
-
 def main():
     print(tf.__version__)
-    # filename = image_text()
-    # pixels = pyplot.imread(filename)
-    # detector = MTCNN()
-    # faces = detector.detect_faces(pixels)
-    # draw_faces(filename, faces)
+    filename = image_text()
+    pixels = pyplot.imread(filename)
+    detector = MTCNN()
+    faces = detector.detect_faces(pixels)
+    draw_faces(filename, faces)
     return
 
 if __name__ == '__main__':
