@@ -1,3 +1,5 @@
 backend/data/
 .vscode/settings.json
 backend/test.txt
+backend/cropped_photos
+
