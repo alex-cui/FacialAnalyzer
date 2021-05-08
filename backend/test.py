@@ -29,36 +29,35 @@ l = []
 
 image_number = 0
 
-def image_text():
-    global image_number
-    text = 'data/images/'
-    num = str(image_number)
-    for i in range(5 - len(num)):
-        text += '0'
-    text += num
-    text += '.png'
-    image_number += 1
-    return text
+# def image_text():
+#    global image_number
+#    text = 'data/images/'
+#    num = str(image_number)
+#    for i in range(5 - len(num)):
+#        text += '0'
+#    text += num
+#    text += '.png'
+#    image_number += 1
+#    return text
 
 # classifier = cv.CascadeClassifier('haarcascade_frontalface_default.xml')
-
+#
 # time_spent = 0
 # cv.setUseOptimized(False)
-# for i in range(10):
-#     pixels = cv.imread(image_text())
-#     interval = cv.getTickCount()
-#     bboxes = classifier.detectMultiScale(pixels)
-
-#     for box in bboxes:
-#         x, y, width, height = box
-#         x2, y2 = x + width, y + height
-#         cv.rectangle(pixels, (x, y), (x2, y2), (0, 0, 255), 1)
-
-#     cv.imshow('Face detection', pixels)
-#     time_spent += (cv.getTickCount() - interval)/cv.getTickFrequency()
-#     print('Total Time:', time_spent)
-#     cv.waitKey(0)
-#     cv.destroyAllWindows()
+# pixels = cv.imread('data/baby/11601.jpg')
+# interval = cv.getTickCount()
+# bboxes = classifier.detectMultiScale(pixels)
+#
+# for box in bboxes:
+#     x, y, width, height = box
+#     x2, y2 = x + width, y + height
+#     cv.rectangle(pixels, (x, y), (x2, y2), (0, 0, 255), 1)
+#
+# cv.imshow('Face detection', pixels)
+# time_spent += (cv.getTickCount() - interval)/cv.getTickFrequency()
+# print('Total Time:', time_spent)
+# cv.waitKey(0)
+# cv.destroyAllWindows()
 
 def draw_faces(filename, result_list):
     data = pyplot.imread(filename)
@@ -68,22 +67,34 @@ def draw_faces(filename, result_list):
         pyplot.subplot(1, len(result_list), i + 1)
         pyplot.axis('off')
         pyplot.imshow(data[y1:y2, x1:x2])
+    # pyplot.show()
+    new_filename = 'cropped_photos/baby/11601.png'
+    pyplot.savefig(new_filename)
     pyplot.show()
+    return new_filename
+
+# def draw_edges(filename, result_list):
+#     data = pyplot.imread(filename)
+#     for i in range (len(result_list)):
+#         points = result_list[i]['keypoints'].values()
+#         print(points)
+#         pyplot.subplot(1, len(result_list), i + 1)
+#         pyplot.axis('off')
+#     return
 
 def main():
-    print(tf.__version__)
-    filename = image_text()
+    filename = 'data/baby/11601.jpg'
     pixels = pyplot.imread(filename)
     detector = MTCNN()
     faces = detector.detect_faces(pixels)
-    draw_faces(filename, faces)
+    print(faces)
+
+    new_filename = draw_faces(filename, faces)
+    # print(new_filename)
+    # pixels2 = pyplot.imread(new_filename)
+    # print(pixels2)
+    # detector2 = MTCNN()
     return
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
