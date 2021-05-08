@@ -86,23 +86,26 @@ def define_age_of_faces():
 
     image_number = 0
 
-
-def main():
-    current_path = os.path.dirname(__file__)
-    data_path = os.path.join(current_path, 'data')
-    baby_path = os.path.join(data_path, 'baby')
-    baby_photos = []
-    with os.scandir(baby_path) as it:
+def crop_photos(path):
+    photos = []
+    with os.scandir(path) as it:
         for entry in it:
             if (entry.name.endswith('.png') or entry.name.endswith('.jpg')) and entry.is_file():
-                baby_photos.append((entry.name, entry.path))
-    # print(baby_photos)
+                photos.append((entry.name, entry.path))
     detector = MTCNN()
-    for photo in baby_photos:
+    for photo in photos:
         pixels = pyplot.imread(photo[1])
         faces = detector.detect_faces(pixels)
         # print(faces)
-        print(draw_faces(photo[1], baby_path, photo[0], faces))
+        print(draw_faces(photo[1], path, photo[0], faces))
+
+
+def main():
+    # change to data/(baby, child, youth, middle_aged, or senior)
+    # make sure you have a directory like cropped_photos/baby and cropped_photos/child ... etc
+    # if you want you can add a new folder into data to receive the images
+    # but make sure you add a new folder into cropped_folders with the same name
+    crop_photos('data/child')
 
     # pixels = pyplot.imread(filename)
     # detector = MTCNN()
