@@ -1,2 +1,7 @@
 .vscode/settings.json
 backend/test.txt
+backend/cropped_photos/baby
+backend/cropped_photos/child
+backend/cropped_photos/youth
+backend/cropped_photos/middle_aged
+backend/cropped_photos/senior
