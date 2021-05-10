@@ -1,3 +1,8 @@
+img {
+  /* object-fit: cover; */
+  object-fit: contain;
+}
+
 .root {
     padding:20px;
 }

@@ -28,12 +28,11 @@ def detect():
 
     # print(data) #finally has img url
     print(data['img'][0:100]) #finally has img url
-
-    success = test.detect(data['img'])
+    successes = test.detect(data['img'])
     print("DONE")
 
     # do something with this data variable that contains the data from the node server 
-    return json.dumps({"newdata":"hereisthenewdatayouwanttosend"}) 
+    return json.dumps({"data":successes}) 
  
 if __name__ == "__main__": 
 	app.run(host='0.0.0.0', port=5000, debug=True) 

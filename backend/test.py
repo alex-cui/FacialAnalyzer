@@ -120,38 +120,22 @@ def drawFaces(filename, directory, name, result_list):
         pyplot.subplot(1, len(result_list), i + 1)
         pyplot.axis('off')
         pyplot.imshow(data[y1:y2, x1:x2])
-        new_filename = 'cropped_photos/' + directory[5:] + '/' + name[0:-4] + '_' + str(i) + '.png'
+        new_filename = 'cropped_photos/' + directory + '/' + name + str(i) + '.png'
         pyplot.savefig(new_filename, bbox_inches='tight')
         pyplot.clf()
         pyplot.cla()
 
-    # pyplot.show()
-    return new_filename
 
 def detect(image):
     print("IN TEST.PY")#finally has img url
     print(image[0:100])
 
     detector = MTCNN()
-
-    # img = base64.b64decode(image)
-    # pixels = io.imread(asdf.BytesIO(img), plugin='matplotlib')
-    # pixels = cv.imread(img)
-    # pixels = data_uri_to_cv2_img(image)
     pixels = readb64(image)
 
-
-    # pixels = io.imread(image) first way
-
-    # f = urllib.request.urlopen("http://matplotlib.sourceforge.net/_static/logo2.png")
-    # pixels = pyplot.imread(f)
-
-    print("pixels here:")
-    # print(pixels)
-
     faces = detector.detect_faces(pixels)
-    drawFaces(image, "child", "test1", faces)
-    print("DONEZO")
+    drawFaces(image, "main", "f", faces)
+    return len(faces) #return how many faces were found
 
 
 def readb64(uri):
