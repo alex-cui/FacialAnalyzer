@@ -158,7 +158,8 @@ def readb64(uri):
    encoded_data = uri.split(',')[1]
    nparr = np.fromstring(base64.b64decode(encoded_data), np.uint8)
    img = cv.imdecode(nparr, cv.IMREAD_COLOR)
-   return img
+   img2 = img[:,:, ::-1]
+   return img2
 
 
 
@@ -167,18 +168,8 @@ def main():
     # make sure you have a directory like cropped_photos/baby and cropped_photos/child ... etc
     # if you want you can add a new folder into data to receive the images
     # but make sure you add a new folder into cropped_folders with the same name
-    crop_photos('data/child')
+    # crop_photos('data/child')
 
-    # pixels = pyplot.imread(filename)
-    # detector = MTCNN()
-    # faces = detector.detect_faces(pixels)
-    # print(faces)
-    #
-    # new_filename = draw_faces(filename, faces)
-    # print(new_filename)
-    # pixels2 = pyplot.imread(new_filename)
-    # print(pixels2)
-    # detector2 = MTCNN()
     return
 
 if __name__ == '__main__':
