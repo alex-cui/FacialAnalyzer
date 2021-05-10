@@ -13,6 +13,14 @@ from keras.layers import Dense, Conv2D, MaxPool2D, Flatten, Dropout
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import Adam
 
+# import urllib
+from skimage import io
+import matplotlib
+import base64
+import io as asdf
+from imageio import imread
+from PIL import Image
+
 
 # def image_text():
 #    global image_number
@@ -94,10 +102,64 @@ def crop_photos(path):
                 photos.append((entry.name, entry.path))
     detector = MTCNN()
     for photo in photos:
+        print(photo[1])
         pixels = pyplot.imread(photo[1])
+        print(pixels)
+
         faces = detector.detect_faces(pixels)
         # print(faces)
         print(draw_faces(photo[1], path, photo[0], faces))
+
+
+def drawFaces(filename, directory, name, result_list):
+    matplotlib.use('agg')
+    data = readb64(filename)
+    for i in range (len(result_list)):
+        x1, y1, width, height = result_list[i]['box']
+        x2, y2 = x1 + width, y1 + height
+        pyplot.subplot(1, len(result_list), i + 1)
+        pyplot.axis('off')
+        pyplot.imshow(data[y1:y2, x1:x2])
+        new_filename = 'cropped_photos/' + directory[5:] + '/' + name[0:-4] + '_' + str(i) + '.png'
+        pyplot.savefig(new_filename, bbox_inches='tight')
+        pyplot.clf()
+        pyplot.cla()
+
+    # pyplot.show()
+    return new_filename
+
+def detect(image):
+    print("IN TEST.PY")#finally has img url
+    print(image[0:100])
+
+    detector = MTCNN()
+
+    # img = base64.b64decode(image)
+    # pixels = io.imread(asdf.BytesIO(img), plugin='matplotlib')
+    # pixels = cv.imread(img)
+    # pixels = data_uri_to_cv2_img(image)
+    pixels = readb64(image)
+
+
+    # pixels = io.imread(image) first way
+
+    # f = urllib.request.urlopen("http://matplotlib.sourceforge.net/_static/logo2.png")
+    # pixels = pyplot.imread(f)
+
+    print("pixels here:")
+    # print(pixels)
+
+    faces = detector.detect_faces(pixels)
+    drawFaces(image, "child", "test1", faces)
+    print("DONEZO")
+
+
+def readb64(uri):
+   encoded_data = uri.split(',')[1]
+   nparr = np.fromstring(base64.b64decode(encoded_data), np.uint8)
+   img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+   return img
+
 
 
 def main():

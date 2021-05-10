@@ -19,23 +19,48 @@ var detect = function() {
     var image = document.getElementById("img");
     var spinner = document.getElementById("spinner");
     var results = document.getElementById("results");
+    var inputImage = document.getElementById("hidden-button");
+
 
     image.style.opacity = ".3";
     spinner.style.display = "block";
     results.style.display = "none";
 
+console.log(image);
+console.log(image.src);
+console.log(inputImage);
+console.log(inputImage.files[0]);
+// console.log(getBase64(inputImage.files[0]));
 
 
-    //make request here to engine in cloud...
-    const Http = new XMLHttpRequest();
+    getBase64(inputImage.files[0]).then(
+        b64 => {
+            body = JSON.stringify({img: b64});
+        
+            //make request here to engine in cloud...
+            const Http = new XMLHttpRequest();
+            const url = '/detect'; //goes to index.js
+            Http.open("POST", url);
+            Http.setRequestHeader("Content-Type", "application/json");
+            Http.send(body);
+            Http.onreadystatechange = (e) => {
+                console.log(Http.responseText);
+            }
+        } 
+    );
+
+
     // const url='https://jsonplaceholder.typicode.com/posts';
-    const url='https://10.10.1.1:6443/api/v1/namespaces/kube-system/services/hello-world/proxy/10.244.1.44:8080';
-    
-    Http.open("GET", url);
-    Http.send();
-    Http.onreadystatechange = (e) => {
-        console.log(Http.responseText)
-    }
+    // const url='https://10.10.1.1:6443/api/v1/namespaces/kube-system/services/hello-world/proxy/10.244.1.44:8080';
+
+    // body = JSON.stringify({img: image.src});
+
+
+
+
+
+
+
 
 //     alexcui@node0:/mydata$ kubectl get pods
 // NAME                                         READY   STATUS    RESTARTS   AGE
@@ -77,3 +102,12 @@ var detect = function() {
         results.style.display = "block";
     }, 3000);
 }
+
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
