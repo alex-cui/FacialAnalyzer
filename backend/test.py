@@ -68,7 +68,22 @@ def define_age_of_faces():
     validation = get_data('cropped_photos/', labels)
     # print(train)
     # print(validation)
-
+    print(len(train))
+    l = []
+    for i in train:
+        if i[1] == 0:
+            l.append('baby')
+        elif i[1] == 1:
+            l.append('child')
+        elif i[1] == 2:
+            l.append('youth')
+        elif i[1] == 3:
+            l.append('middle_aged')
+        else:
+            l.append('senior')
+    sns.set_style('darkgrid')
+    sns.countplot(l)
+    pyplot.show()
 
     image_number = 0
 
@@ -78,11 +93,11 @@ def main():
     # make sure you have a directory like cropped_photos/baby and cropped_photos/child ... etc
     # if you want you can add a new folder into data to receive the images
     # but make sure you add a new folder into cropped_folders with the same name
-    # crop_photos('data/baby')
+    crop_photos('data/baby')
     # crop_photos('data/child')
     # crop_photos('data/youth')
     # crop_photos('data/middle_aged')
-    crop_photos('data/senior')
+    # crop_photos('data/senior')
 
     define_age_of_faces()
 
