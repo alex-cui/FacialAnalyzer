@@ -85,15 +85,30 @@ def get_data(data_dir):
 
 
 def define_age_of_faces():
-    labels = ['baby', 'child', 'youth', 'middle_aged', 'senior']
+    llabels = ['baby', 'child', 'youth', 'middle_aged', 'senior']
 
-    train = get_data('data/')
-    validation = get_data('data/')
+    train = get_data('cropped_photos/', labels)
+    validation = get_data('cropped_photos/', labels)
+    # print(train)
+    # print(validation)
+    print(len(train))
     l = []
-
+    for i in train:
+        if i[1] == 0:
+            l.append('baby')
+        elif i[1] == 1:
+            l.append('child')
+        elif i[1] == 2:
+            l.append('youth')
+        elif i[1] == 3:
+            l.append('middle_aged')
+        else:
+            l.append('senior')
+    # sns.set_style('darkgrid')
+    # sns.countplot(l)
+    # pyplot.show()
 
     image_number = 0
-
 def crop_photos(path):
     photos = []
     with os.scandir(path) as it:
@@ -114,11 +129,14 @@ def crop_photos(path):
 def drawFaces(filename, directory, name, result_list):
     matplotlib.use('agg')
     data = readb64(filename)
+    new_filename = ''
     for i in range (len(result_list)):
         x1, y1, width, height = result_list[i]['box']
         x2, y2 = x1 + width, y1 + height
         pyplot.subplot(1, len(result_list), i + 1)
         pyplot.axis('off')
+        if data[y1:y2, x1:x2].shape[0] <= 0 or data[y1:y2, x1:x2].shape[1] <= 0:
+            continue
         pyplot.imshow(data[y1:y2, x1:x2])
         new_filename = 'cropped_photos/' + directory[5:] + '/' + name[0:-4] + '_' + str(i) + '.png'
         pyplot.savefig(new_filename, bbox_inches='tight')
