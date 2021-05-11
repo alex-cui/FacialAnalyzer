@@ -195,6 +195,7 @@ def detect(image):
         img = cv.imread('cropped_photos/main/' + picture)
         retval, buffer = cv.imencode('.png', img)
         b64_val = base64.b64encode(buffer)
+        print(b64_val)
 
     return fileNames #return how many faces were found
 
