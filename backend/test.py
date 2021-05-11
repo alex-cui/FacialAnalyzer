@@ -20,6 +20,7 @@ import base64
 import io as asdf
 from imageio import imread
 from PIL import Image
+import time
 
 
 # def image_text():
@@ -130,6 +131,8 @@ def drawFaces(filename, directory, name, result_list):
     matplotlib.use('agg')
     data = readb64(filename)
     new_filename = ''
+    fileNames = []
+
     for i in range (len(result_list)):
         x1, y1, width, height = result_list[i]['box']
         x2, y2 = x1 + width, y1 + height
@@ -138,10 +141,15 @@ def drawFaces(filename, directory, name, result_list):
         if data[y1:y2, x1:x2].shape[0] <= 0 or data[y1:y2, x1:x2].shape[1] <= 0:
             continue
         pyplot.imshow(data[y1:y2, x1:x2])
+
+        #file name is time + 1
         new_filename = 'cropped_photos/' + directory + '/' + name + str(i) + '.png'
         pyplot.savefig(new_filename, bbox_inches='tight')
         pyplot.clf()
         pyplot.cla()
+        fileNames.append('/' + name + str(i) + '.png')
+
+    return fileNames
 
 
 def detect(image):
@@ -152,8 +160,11 @@ def detect(image):
     pixels = readb64(image)
 
     faces = detector.detect_faces(pixels)
-    drawFaces(image, "main", "f", faces)
-    return len(faces) #return how many faces were found
+    t = time.localtime()
+    current_time = time.strftime("%H:%M:%S", t)
+
+    fileNames = drawFaces(image, "main", current_time, faces)
+    return fileNames #return how many faces were found
 
 
 def readb64(uri):

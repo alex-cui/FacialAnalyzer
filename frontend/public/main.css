@@ -3,6 +3,11 @@ img {
   object-fit: contain;
 }
 
+
+body {
+  /* background-color: #F6F3EA !important; */
+}
+
 .root {
     padding:20px;
 }
@@ -13,6 +18,7 @@ img {
 
 .filters {
     float:left;
+    /* display: inline-block; */
     width:150px;
     padding:10px;
     border:1px solid grey;

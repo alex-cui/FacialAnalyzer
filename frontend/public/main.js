@@ -28,6 +28,10 @@ var detect = function() {
     spinner.style.display = "block";
     results.style.display = "none";
 
+    //delete existing faces
+    const allFacesDiv = document.getElementById("allFaces");
+    allFacesDiv.innerHTML = '';
+
 console.log(image);
 console.log(image.src);
 console.log(inputImage);
@@ -50,20 +54,23 @@ console.log(inputImage.files[0]);
 
                     console.log(Http.responseText);
                     console.log(JSON.parse(Http.responseText));
-                    console.log(JSON.parse(Http.responseText).data);
+                    console.log(JSON.parse(Http.responseText).data); //correct
 
+                    let fileNames = (JSON.parse(Http.responseText)).data;
 
-                    let successAmount = (JSON.parse(Http.responseText)).data;
-                    for (let i = 0; i < successAmount; i++) {
+                    for (let f of fileNames) {
                         var img = document.createElement("img");
-                        img.src = "/f" + i + ".png";
-                        img.width = "450";
-                        img.height = "300";
+                        img.src = f;
+                        
+                        // img.src = "/f" + i + ".png";
+                        // img.width = "450";
+                        // img.height = "300";
 
+                        // var div = document.createElement("div");
+                        // div.appendChild(img);
+                        console.log(img);
 
-
-                        var src = document.getElementById("allFaces");
-                        src.appendChild(img);
+                        allFacesDiv.appendChild(img);
                     }
 
                     //stop spinner

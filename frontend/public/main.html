@@ -4,20 +4,13 @@
         <div style="float:left">
             <div class="image-container mb-2">
                 <div id="spinner" class="loader" style="position: absolute; display:none"></div>
-                <img width="450" height="300" id="img" name="image" src="sample.jpeg">
+                <img width="450" height="300" id="img" name="image">
+                <!-- src="sample.jpeg" -->
             </div>
             <div style="width:450px; text-align: center;">
                 <input id="hidden-button" style="display: none;" onchange="loadFile(event)" type="file" name="img" accept="image/*">
                 <button id="upload-button" style="margin-left: auto; margin-right: auto;" type="button" class="btn btn-outline-dark">Upload Image</button>
                 <button id="detect" onclick="detect()" class="btn btn-primary">Detect!</button>
-            </div>
-            <div id="results" style="display:none; margin-top:50px; text-align: center; color:grey">
-                <h3>3 faces have been detected</h3>
-                <h4>- 1 boy, 2 girls</h4>
-                <h4>- 2 adults, 1 kid</h4>
-                <div id="allFaces">
-                    <!-- <img width="450" height="300" src="t_0.png"> -->
-                </div>
             </div>
         </div>
         <div class="filters">
@@ -28,6 +21,31 @@
             <div>
                 <p><input type="checkbox" style="margin-right:8px">Age</p>
             </div>
+        </div>
+    </div>
+            <!-- display:none;  -->
+
+    <div id="results" style="display:none; margin-top:50px; text-align: center; color:grey">
+        <div>
+            <h3>3 faces have been detected</h3>
+            <h4>- 1 boy, 2 girls</h4>
+            <h4>- 2 adults, 1 kid</h4>
+        </div>
+        <div id="allFaces">
+            <!-- <div>
+                <img width="450" height="300" id="img" name="image" src="sample.jpeg">
+            </div>
+            <div>
+                <img width="450" height="300" id="img" name="image" src="sample.jpeg">
+            </div>            
+            <div>
+                <img width="450" height="300" id="img" name="image" src="sample.jpeg">
+            </div> -->
+
+
+            <!-- <img width="450" height="300" id="img" name="image" src="sample.jpeg">
+            <img width="450" height="300" id="img" name="image" src="sample.jpeg">
+            <img width="450" height="300" id="img" name="image" src="sample.jpeg"> -->
         </div>
     </div>
 </div>
