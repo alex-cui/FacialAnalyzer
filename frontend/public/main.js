@@ -56,20 +56,16 @@ console.log(inputImage.files[0]);
                     console.log(JSON.parse(Http.responseText));
                     console.log(JSON.parse(Http.responseText).data); //correct
 
-                    let fileNames = (JSON.parse(Http.responseText)).data;
+                    let b64Images = (JSON.parse(Http.responseText)).data;
 
-                    for (let f of fileNames) {
+                    for (let i of b64Images) {
                         var img = document.createElement("img");
-                        img.src = f;
-                        
-                        // img.src = "/f" + i + ".png";
+                        img.src = "data:image/png;base64," + i;
                         // img.width = "450";
                         // img.height = "300";
 
                         // var div = document.createElement("div");
                         // div.appendChild(img);
-                        console.log(img);
-
                         allFacesDiv.appendChild(img);
                     }
 

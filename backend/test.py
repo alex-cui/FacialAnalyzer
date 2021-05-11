@@ -189,15 +189,16 @@ def detect(image):
 
 
     fileNames = drawFaces(image, "main", current_time, faces)
+    b64Images = []
 
     for picture in fileNames:
         print(picture)
         img = cv.imread('cropped_photos/main/' + picture)
         retval, buffer = cv.imencode('.png', img)
         b64_val = base64.b64encode(buffer)
-        print(b64_val)
+        b64Images.append(b64_val)
 
-    return fileNames #return how many faces were found
+    return b64Images #return how many faces were found
 
 
 def readb64(uri):

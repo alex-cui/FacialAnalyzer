@@ -28,10 +28,12 @@ def detect():
 
     # print(data) #finally has img url
     print(data['img'][0:100]) #finally has img url
-    fileNames = test.detect(data['img'])
+    b64Images = test.detect(data['img'])
     print("DONE")
 
-    return json.dumps({"data":fileNames}) 
+    b64Images[:] = [i.decode("utf-8") for i in b64Images] #just takes out b' from string
+
+    return json.dumps({"data":b64Images}) 
  
 if __name__ == "__main__": 
 	app.run(host='0.0.0.0', port=5000, debug=True) 

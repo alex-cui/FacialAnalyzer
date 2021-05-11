@@ -10,7 +10,7 @@ app.use(express.static(__dirname + '/node_modules/bootstrap/dist'));
 // app.use(express.json()); //parses request body
 app.use(express.json({limit: "50mb"}));
 app.use(express.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
-app.use(express.static(process.cwd() + '../../backend/cropped_photos/main')); //have images available, cant just call relative path
+// app.use(express.static(process.cwd() + '../../backend/cropped_photos/main')); //have images available, cant just call relative path
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/public/main.html'));
