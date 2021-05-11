@@ -2,3 +2,4 @@
 backend/test.txt
 backend/cropped_photos/
 backend/__pycache__/
+backend/data/
