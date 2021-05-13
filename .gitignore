@@ -4,3 +4,5 @@ backend/cropped_photos/
 backend/__pycache__/
 backend/data/
 backend/validation
+backend/gender
+backend/cropped_gender
