@@ -342,8 +342,8 @@ def main():
 
     # define_age_of_faces()
     # crop_photos('gender/male')
-    # guess_age_of_faces()
-    guess_gender_of_faces()
+    guess_age_of_faces()
+    # guess_gender_of_faces()
     # print('hello')
 
     return
