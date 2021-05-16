@@ -51,19 +51,26 @@ app.post('/detect', async function (req, res) {
   console.log(JSON.stringify(req.body));
 
 
+  // var options = { 
+  //     method: 'POST', 
+  //     uri: 'http://127.0.0.1:5000/detect', 
+  //     body: req.body,
+  //     json: true // Automatically stringifies the body to JSON 
+  // }; 
+
   var options = { 
-      method: 'POST', 
-      uri: 'http://127.0.0.1:5000/detect', 
-      body: req.body,
-      json: true // Automatically stringifies the body to JSON 
-  }; 
+    method: 'POST', 
+    uri: 'http://node0.alexcui-qv98630.cs179icloud-pg0.utah.cloudlab.us:5000/postdata', 
+    body: req.body,
+    json: true // Automatically stringifies the body to JSON 
+}; 
 
-
-
+  
    
   var returndata; 
   var sendrequest = await request(options) 
           .then(function (parsedBody) { 
+              console.log(parsedBody);
               // console.log(parsedBody); // parsedBody contains the data sent back from the Flask server 
               returndata = parsedBody; // do something with this data, here I'm assigning it to a variable. 
           }) 

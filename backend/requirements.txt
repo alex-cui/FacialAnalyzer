@@ -1,0 +1,8 @@
+flask
+flask_cors
+opencv-python
+seaborn
+sklearn
+tensorflow
+mtcnn
+scikit-image
