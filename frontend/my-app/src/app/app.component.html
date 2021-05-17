@@ -25,20 +25,20 @@
         </div>
     </div>
   </div>
-  <div *ngIf="!loading && images.length > 0" fxLayout="column" fxLayoutAlign="center" style=" margin-top:50px; color:grey">
-      <div fxLayout="column" fxLayoutAlign="center">
-          <h3>{{images.length}} faces have been detected</h3>
-          <h4>- 1 boy, 2 girls</h4>
-          <h4>- 2 adults, 1 kid</h4>
+  <div *ngIf="!loading && faces.length > 0"  fxLayout="column" fxLayoutAlign="center" style=" margin-top:50px; color:grey">
+      <div style="text-align: center">
+          <h2>{{faces.length}} faces have been detected</h2>
+          <h3>- 1 boy, 2 girls</h3>
+          <h3>- 2 adults, 1 kid</h3>
       </div>
-      <div id="allFaces">
-        <div *ngFor="let b64 of images" fxLayout="row">
+      <div>
+        <div *ngFor="let im of faces" fxLayout="row">
           <div>
-            <img width="450" height="300" src="{{b64}}">
+            <img width="300" height="150" src="{{im.src}}">
           </div>
-          <div style="align-self: center;">
-            <h3>Age: 21</h3>
-            <h3>Gender: Boy</h3>
+          <div style="align-self: center">
+            <h3 *ngIf="im.age"><span style="font-weight: bold;">Age: </span>{{im.age}} ({{im.ageConfidence}}% confident)</h3>
+            <h3 *ngIf="im.gender"><span style="font-weight: bold;">Gender: </span>{{im.gender}} ({{im.genderConfidence}}% confident)</h3>
           </div>
         </div>
       </div>

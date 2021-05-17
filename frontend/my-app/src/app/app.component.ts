@@ -10,7 +10,8 @@ import {HttpClient} from '@angular/common/http';
 export class AppComponent {
   title = 'my-app';
   public loading : boolean = false;
-  public images = [];
+  public faces = [];
+  public backendURL = "http://127.0.0.1:5000";
 
   constructor(private http: HttpClient) {}
   
@@ -29,26 +30,59 @@ export class AppComponent {
   public detect() {
     var image = document.getElementById("img");
     var inputImage = <HTMLInputElement>document.getElementById("hidden-button");
-
-
     image.style.opacity = ".3";
 
     this.getBase64(inputImage.files[0]).then(
         b64 => {
+            // console.log(b64);
             this.loading = true;
-            this.images = [];
+            this.faces = [];
         
-            this.http.post('http://127.0.0.1:5000/detect', {img: b64}).subscribe(res => {
+            //find all faces
+            this.http.post(this.backendURL + "/detect", {img: b64}).subscribe(res => {
               console.log("done");
-              console.log(res);
 
-              for (let b64 of <any>res['data']) {
-                  this.images.push("data:image/png;base64," + b64);
+              let temp = []
+              for (let r of <any>res['data']) {
+                temp.push("data:image/png;base64," + r);
               }
 
-              image.style.opacity = "1";
-              this.loading = false;
+              // console.log(temp);
+              // console.log(temp[0].substring(temp[0].length - 20));
+              // console.log(temp[1].substring(temp[1].length - 20));
+              // console.log(temp[2].substring(temp[2].length - 20));
+
+
+              //guess age of faces
+              this.http.post(this.backendURL + "/guessAge", {imgs: temp}).subscribe(res2 => {
+                console.log(res2);
+
+                //guess gender of faces
+                this.http.post(this.backendURL + "/guessGender", {imgs: temp}).subscribe(res3 => {
+                  console.log(res3);
+  
+                  for (let i = 0; i < res['data'].length; i++) {
+                    this.faces.push({
+                      src: temp[i],
+                      age: res2['data'][i].class,
+                      ageConfidence: res2['data'][i].confidence,
+                      gender: res3['data'][i].class,
+                      genderConfidence: res3['data'][i].confidence,
+                    });
+                  }
+
+                  image.style.opacity = "1";
+                  this.loading = false;
+                }, err => {
+                  console.log(err);
+                  this.loading = false;
+                });
+              }, err => {
+                console.log(err);
+                this.loading = false;
+              });
             }, err => {
+              console.log(err);
               this.loading = false;
             });
         } 
