@@ -15,6 +15,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import Adam
 
 import shutil
+import test
 
 def guess_age_of_faces():
     batch_size = 32
@@ -338,11 +339,48 @@ def crop_photos(path):
             shutil.move(photo[1], 'gender/done_male/' + photo[0])
 
 
+
+def guess(json_path, b64):
+    json_file = open(json_path, 'r')
+    loaded_model_json = json_file.read()
+    json_file.close()
+    loaded_model = model_from_json(loaded_model_json)
+    loaded_model.load_weights(json_path[0:-5] + '.h5')
+    print('Loaded model from disk')
+    loaded_model.compile(optimizer = 'adam',
+    loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits = True),
+    metrics = ['accuracy'])
+
+    class_names = []
+
+    if json_path == 'age.json':
+        class_names = ['baby', 'child', 'middle_aged', 'senior', 'youth']
+    else:
+        class_names = ['male', 'female']
+
+    img_size = 180
+
+    img = test.readb64(b64)
+    img2 = cv.resize(img, (img_size, img_size))
+    img = img2[:,:, ::-1]
+
+    img_array = keras.preprocessing.image.img_to_array(img)
+    img_array = tf.expand_dims(img_array, 0)
+    predictions = loaded_model.predict(img_array)
+    score = tf.nn.softmax(predictions[0])
+
+    print(
+        '{} most likely belongs to {} with a {:.2f} percent confidence.'
+        .format('Photo', class_names[np.argmax(score)], 100 * np.max(score))
+    )
+
+
 def main():
 
     # define_age_of_faces()
     # crop_photos('gender/male')
-    guess_age_of_faces()
+    # guess('age.json', b64)
+    # guess('gender.json', b64)
     # guess_gender_of_faces()
     # print('hello')
 
