@@ -28,6 +28,6 @@ spec:
     spec:
       containers:
       - name: backend
-        image: backend:latest
+        image: alexcui1/cs179i_alex_andrew:latest
         ports:
         - containerPort: 5000
