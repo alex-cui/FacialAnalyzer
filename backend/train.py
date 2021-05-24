@@ -500,10 +500,14 @@ def guess(json_path, b64):
     predictions = loaded_model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
 
-    print(
-        '{} most likely belongs to {} with a {:.2f} percent confidence.'
-        .format('Photo', class_names[np.argmax(score)], 100 * np.max(score))
-    )
+    return {
+        "class" : class_names[np.argmax(score)],
+        "confidence" : round(100 * np.max(score), 2)
+    }
+    # print(
+    #     '{} most likely belongs to {} with a {:.2f} percent confidence.'
+    #     .format('Photo', class_names[np.argmax(score)], 100 * np.max(score))
+    # )
 
 
 def main():
