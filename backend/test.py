@@ -17,7 +17,7 @@ from keras.optimizers import Adam
 from skimage import io
 import matplotlib
 import base64
-import io as asdf
+import io
 from imageio import imread
 from PIL import Image
 import time
@@ -61,7 +61,7 @@ def drawFaces(filename, directory, name, result_list):
     matplotlib.use('agg')
     data = readb64(filename)
     new_filename = ''
-    fileNames = []
+    pictures = []
 
     for i in range (len(result_list)):
         x1, y1, width, height = result_list[i]['box']
@@ -71,20 +71,28 @@ def drawFaces(filename, directory, name, result_list):
         if data[y1:y2, x1:x2].shape[0] <= 0 or data[y1:y2, x1:x2].shape[1] <= 0:
             continue
         pyplot.imshow(data[y1:y2, x1:x2])
+        buf = io.BytesIO()
+        pyplot.savefig(buf, format = 'png')
+        buf.seek(0)
+        bytes = np.asarray(bytearray(buf.read()), dtype = np.uint8)
+        buf.close()
+        im = cv.imdecode(bytes, cv.IMREAD_COLOR)
+        pictures.append(im)
 
-        #file name is time + 1
-        new_filename = 'cropped_photos/' + directory + '/' + name + str(i) + '.png'
-        pyplot.savefig(new_filename, bbox_inches='tight')
-        pyplot.clf()
-        pyplot.cla()
-        fileNames.append('/' + name + str(i) + '.png')
+        #
+        # #file name is time + 1
+        # new_filename = 'cropped_photos/' + directory + '/' + name + str(i) + '.png'
+        # pyplot.savefig(new_filename, bbox_inches='tight')
+        # pyplot.clf()
+        # pyplot.cla()
+        # fileNames.append('/' + name + str(i) + '.png')
 
-    return fileNames
+    return pictures
 
 
 def detect(image):
     print("IN TEST.PY")#finally has img url
-    print(image[0:100])
+    print(image)
 
     detector = MTCNN()
     pixels = readb64(image)
@@ -94,13 +102,12 @@ def detect(image):
     current_time = time.strftime("%H:%M:%S", t)
 
 
-    fileNames = drawFaces(image, "main", current_time, faces)
+    pictures = drawFaces(image, "main", current_time, faces)
     b64Images = []
 
-    for picture in fileNames:
+    for picture in pictures:
         print(picture)
-        img = cv.imread('cropped_photos/main/' + picture)
-        retval, buffer = cv.imencode('.png', img)
+        retval, buffer = cv.imencode('.png', picture)
         b64_val = base64.b64encode(buffer)
         b64Images.append(b64_val)
 
@@ -108,7 +115,8 @@ def detect(image):
 
 
 def readb64(uri):
-   encoded_data = uri.split(',')[1]
+   # encoded_data = uri.split(',')[1]
+   encoded_data = uri
    nparr = np.fromstring(base64.b64decode(encoded_data), np.uint8)
    img = cv.imdecode(nparr, cv.IMREAD_COLOR)
    img2 = img[:,:, ::-1]
@@ -122,7 +130,7 @@ def main():
     # if you want you can add a new folder into data to receive the images
     # but make sure you add a new folder into cropped_folders with the same name
     # crop_photos('data/child')
-    crop_photos('data/new')
+    # crop_photos('data/new')
     return
 
 if __name__ == '__main__':
