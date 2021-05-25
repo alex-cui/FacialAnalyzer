@@ -72,10 +72,12 @@ def drawFaces(filename, directory, name, result_list):
             continue
         pyplot.imshow(data[y1:y2, x1:x2])
         buf = io.BytesIO()
-        pyplot.savefig(buf, format = 'png')
+        pyplot.savefig(buf, format = 'png', bbox_inches = 'tight')
         buf.seek(0)
         bytes = np.asarray(bytearray(buf.read()), dtype = np.uint8)
         buf.close()
+        pyplot.clf()
+        pyplot.cla()
         im = cv.imdecode(bytes, cv.IMREAD_COLOR)
         pictures.append(im)
 
