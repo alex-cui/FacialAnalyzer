@@ -3,6 +3,6 @@ flask_cors
 opencv-python
 seaborn
 sklearn
-tensorflow
+tensorflow==2.4.1
 mtcnn
 scikit-image

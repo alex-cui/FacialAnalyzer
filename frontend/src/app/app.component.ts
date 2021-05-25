@@ -8,11 +8,10 @@ import {HttpClient} from '@angular/common/http';
 })
 
 export class AppComponent {
-  title = 'my-app';
   public loading : boolean = false;
   public faces = [];
-  public backendURL1 = "http://127.0.0.1:5000";
-  public backendURL2 = "http://127.0.0.1:5000";
+  public backendURL = "http://127.0.0.1:5000";
+  // public backendURL2 = "http://127.0.0.1:5000";
   // public backendURL = "http://node0.alexcui-qv98630.cs179icloud-pg0.utah.cloudlab.us:5000";
 
   public ages = {};
@@ -29,6 +28,11 @@ export class AppComponent {
   constructor(private http: HttpClient) {}
   
   public uploadImage() {
+    this.http.post(this.backendURL + "/postdata", {img:0}).subscribe(res2 => {
+      console.log(res2);
+    }, err => {
+      console.log(err);
+    });
       document.getElementById("hidden-button").click();
   }
 
@@ -53,7 +57,7 @@ export class AppComponent {
             let time = performance.now();
 
             //find all faces
-            this.http.post(this.backendURL1 + "/detect", {img: b64}).subscribe(res => {
+            this.http.post(this.backendURL + "/detect", {img: b64}).subscribe(res => {
               console.log("done");
               this.faceTime = this.getTimer(time);
 
@@ -75,7 +79,7 @@ export class AppComponent {
               if (this.guessAge) {
                 let t1 = performance.now();
 
-                this.http.post(this.backendURL1 + "/guessAge", {imgs: tempFaces}).subscribe(res2 => {
+                this.http.post(this.backendURL + "/guessAge", {imgs: tempFaces}).subscribe(res2 => {
                   console.log(res2);
                   this.ageTime = this.getTimer(t1);
 
@@ -109,7 +113,7 @@ export class AppComponent {
               if (this.guessGender) {
                 let t1 = performance.now();
 
-                this.http.post(this.backendURL2 + "/guessGender", {imgs: tempFaces}).subscribe(res3 => {
+                this.http.post(this.backendURL + "/guessGender", {imgs: tempFaces}).subscribe(res3 => {
                   console.log(res3);
                   this.genderTime = this.getTimer(t1);
 
@@ -172,12 +176,6 @@ export class AppComponent {
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result);
       reader.onerror = error => reject(error);
-    });
-  }
-
-  public changePhone(body) {
-    return this.http.post('http://127.0.0.1:5000/detect', {
-      data: body
     });
   }
 }

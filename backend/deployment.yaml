@@ -7,9 +7,9 @@ spec:
     app: backend
   ports:
   - protocol: "TCP"
-    port: 6000
+    port: 6001
     targetPort: 5000
-  type: LoadBalancer
+  type: NodePort
 
 ---
 apiVersion: apps/v1
@@ -31,3 +31,4 @@ spec:
         image: alexcui1/cs179i_alex_andrew:latest
         ports:
         - containerPort: 5000
+        imagePullPolicy: Always
