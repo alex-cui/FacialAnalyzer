@@ -7,3 +7,7 @@ backend/validation
 backend/gender
 backend/cropped_gender
 backend/test
+backend/celeb
+backend/cropped_new_celeb
+backend/new_celeb
+backend/cropped_test_celeb

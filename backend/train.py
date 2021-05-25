@@ -298,6 +298,135 @@ def guess_gender_of_faces():
                 .format(image, class_names[np.argmax(score)], 100 * np.max(score))
             )
 
+def guess_celebrity_face():
+    batch_size = 32
+    img_size = 180
+
+    train_ds = tf.keras.preprocessing.image_dataset_from_directory(
+        'cropped_new_celeb/',
+        validation_split = .2,
+        subset = 'training',
+        seed = 123,
+        image_size = (img_size, img_size),
+        batch_size = batch_size
+    )
+    val_ds = tf.keras.preprocessing.image_dataset_from_directory(
+        'cropped_new_celeb/',
+        validation_split = .2,
+        subset = 'validation',
+        seed = 123,
+        image_size = (img_size, img_size),
+        batch_size = batch_size
+    )
+    class_names = train_ds.class_names
+    print(class_names)
+    print(train_ds)
+    print(val_ds)
+
+    data_augmentation = keras.Sequential([
+        layers.experimental.preprocessing.RandomFlip('horizontal', input_shape = (img_size, img_size, 3)),
+        layers.experimental.preprocessing.RandomRotation(.1),
+        layers.experimental.preprocessing.RandomZoom(.1)
+    ])
+
+    json_path = 'new_celeb.json'
+    num_classes = 5
+
+    if os.path.isfile(json_path):
+        json_file = open(json_path, 'r')
+        loaded_model_json = json_file.read()
+        json_file.close()
+        loaded_model = model_from_json(loaded_model_json)
+        loaded_model.load_weights('new_celeb.h5')
+        print('Loaded model from disk')
+        loaded_model.compile(optimizer = 'adam',
+        loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits = True),
+        metrics = ['accuracy'])
+
+        for image in os.listdir('cropped_test_celeb'):
+            img = keras.preprocessing.image.load_img(
+                'cropped_test_celeb/' + image, target_size = (img_size, img_size)
+            )
+
+            img_array = keras.preprocessing.image.img_to_array(img)
+            img_array = tf.expand_dims(img_array, 0)
+            predictions = loaded_model.predict(img_array)
+            score = tf.nn.softmax(predictions[0])
+
+            print(
+                '{} most likely belongs to {} with a {:.2f} percent confidence.'
+                .format(image, class_names[np.argmax(score)], 100 * np.max(score))
+            )
+    else:
+        model = Sequential([
+            data_augmentation,
+            layers.experimental.preprocessing.Rescaling(1./255, input_shape = (img_size, img_size, 3)),
+            layers.Conv2D(16, 3, padding = 'same', activation = 'relu'),
+            layers.MaxPooling2D(),
+            layers.Conv2D(32, 3, padding = 'same', activation = 'relu'),
+            layers.MaxPooling2D(),
+            layers.Conv2D(64, 3, padding = 'same', activation = 'relu'),
+            layers.MaxPooling2D(),
+            layers.Dropout(.2),
+            layers.Flatten(),
+            layers.Dense(128, activation = 'relu'),
+            layers.Dense(num_classes)
+        ])
+        model.compile(optimizer = 'adam',
+        loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits = True),
+        metrics = ['accuracy'])
+        model.summary()
+
+        epochs = 15
+        history = model.fit(
+            train_ds,
+            validation_data = val_ds,
+            epochs = epochs
+        )
+        acc = history.history['accuracy']
+        val_acc = history.history['val_accuracy']
+        loss = history.history['loss']
+        val_loss = history.history['val_loss']
+
+        epochs_range = range(epochs)
+
+        plt.figure(figsize = (8, 8))
+        plt.subplot(1, 2, 1)
+        plt.plot(epochs_range, acc, label = 'Training Accuracy')
+        plt.plot(epochs_range, val_acc, label = 'Validation Accuracy')
+        plt.legend(loc = 'lower right')
+        plt.title('Training and Validation Accuracy')
+
+        plt.subplot(1, 2, 2)
+        plt.plot(epochs_range, loss, label = 'Training Loss')
+        plt.plot(epochs_range, val_loss, label = 'Validation Loss')
+        plt.legend(loc = 'upper right')
+        plt.title('Training and Validation Loss')
+
+        plt.show()
+
+        model_json = model.to_json()
+        with open('new_celeb.json', 'w') as json_file:
+            json_file.write(model_json)
+        model.save_weights('new_celeb.h5')
+        print('Saved Model to Disk')
+
+        for image in os.listdir('test'):
+            img = keras.preprocessing.image.load_img(
+                'test/' + image, target_size = (img_size, img_size)
+            )
+
+            img_array = keras.preprocessing.image.img_to_array(img)
+            img_array = tf.expand_dims(img_array, 0)
+            predictions = model.predict(img_array)
+            score = tf.nn.softmax(predictions[0])
+
+            print(
+                '{} most likely belongs to {} with a {:.2f} percent confidence.'
+                .format(image, class_names[np.argmax(score)], 100 * np.max(score))
+            )
+
+
 def draw_faces(filename, directory, name, result_list):
     data = plt.imread(filename)
     new_filename = ''
@@ -309,7 +438,7 @@ def draw_faces(filename, directory, name, result_list):
         if data[y1:y2, x1:x2].shape[0] <= 0 or data[y1:y2, x1:x2].shape[1] <= 0:
             continue
         plt.imshow(data[y1:y2, x1:x2])
-        new_filename = 'cropped_gender/' + directory[7:] + '/' + name[0:-4] + '_' + str(i) + '.png'
+        new_filename = 'cropped_new_celeb/' + directory[10:] + '/' + name[0:-4] + '_' + str(i) + '.png'
         plt.savefig(new_filename, bbox_inches='tight')
         plt.clf()
         plt.cla()
@@ -336,7 +465,7 @@ def crop_photos(path):
             # print(faces)
             cropped_url = draw_faces(photo[1], path, photo[0], faces)
             print(cropped_url)
-            shutil.move(photo[1], 'gender/done_male/' + photo[0])
+            # shutil.move(photo[1], 'president/done_president/' + photo[0])
 
 
 
@@ -355,8 +484,10 @@ def guess(json_path, b64):
 
     if json_path == 'age.json':
         class_names = ['baby', 'child', 'middle_aged', 'senior', 'youth']
-    else:
+    elif json_path == 'gender.json':
         class_names = ['male', 'female']
+    else:
+        class_names = ['Barack Obama', 'Daniel Craig', 'Scarlett Johansson', 'Shakira', 'Zac Efron']
 
     img_size = 180
 
@@ -380,11 +511,14 @@ def guess(json_path, b64):
 
 
 def main():
-
+    os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
     # define_age_of_faces()
-    # crop_photos('gender/male')
+    # crop_photos('new_celeb/Zac Efron')
+    # print('hello')
+    # guess_celebrity_face()
     # guess('age.json', b64)
     # guess('gender.json', b64)
+    # guess('celeb.json', b64)
     # guess_gender_of_faces()
     # print('hello')
 
