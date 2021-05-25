@@ -115,8 +115,8 @@ def detect(image):
 
 
 def readb64(uri):
-   # encoded_data = uri.split(',')[1]
-   encoded_data = uri
+   encoded_data = uri.split(',')[1]
+   # encoded_data = uri
    nparr = np.fromstring(base64.b64decode(encoded_data), np.uint8)
    img = cv.imdecode(nparr, cv.IMREAD_COLOR)
    img2 = img[:,:, ::-1]
@@ -131,6 +131,11 @@ def main():
     # but make sure you add a new folder into cropped_folders with the same name
     # crop_photos('data/child')
     # crop_photos('data/new')
+    # image = cv.imread('12234.jpg')
+    # retval, buffer = cv.imencode('.png', image)
+    # b64 = base64.b64encode(buffer)
+    # b64 = 's,' + str(b64)
+    # l = detect(b64)
     return
 
 if __name__ == '__main__':
