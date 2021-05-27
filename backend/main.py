@@ -14,11 +14,11 @@ CORS(app, support_credentials=True)
 def index(): 
 	return "Flask server" 
  
+#test request
 @app.route('/postdata', methods = ['POST']) 
 def postdata(): 
     data = request.get_json() 
     print(data) 
-    # do something with this data variable that contains the data from the node server 
     return json.dumps({"newdata":"hereisthenewdatayouwanttosend"}) 
 
 @app.route('/detect', methods = ['POST']) 
@@ -38,12 +38,8 @@ def guessAge():
     data = json.dumps(data) #converts a Python object into a json string
     data = json.loads(data)
 
-    # print(data['imgs'][0][-20])
-    # print(data['imgs'][1][-20])
-    # print(data['imgs'][2][-20])
-
-    allAges = [train.guess('age.json', b64) for b64 in data['imgs']]
-    return json.dumps({"data" : allAges}) 
+    ret = [train.guess('age.json', b64) for b64 in data['imgs']]
+    return json.dumps({"data" : ret}) 
 
 @app.route('/guessGender', methods = ['POST']) 
 def guessGender(): 
@@ -51,8 +47,17 @@ def guessGender():
     data = json.dumps(data) #converts a Python object into a json string
     data = json.loads(data)
 
-    allAges = [train.guess('gender.json', b64) for b64 in data['imgs']]
-    return json.dumps({"data" : allAges}) 
+    ret = [train.guess('gender.json', b64) for b64 in data['imgs']]
+    return json.dumps({"data" : ret}) 
+
+@app.route('/guessCelebrity', methods = ['POST']) 
+def guessCelebrity(): 
+    data = request.get_json()
+    data = json.dumps(data) #converts a Python object into a json string
+    data = json.loads(data)
+
+    ret = [train.guess('new_celeb.json', b64) for b64 in data['imgs']]
+    return json.dumps({"data" : ret}) 
 
 if __name__ == "__main__": 
 	app.run(host='0.0.0.0', port=5000, debug=True) 

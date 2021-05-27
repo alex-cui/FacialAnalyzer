@@ -22,21 +22,31 @@
         <div fxLayout="column" fxLayoutGap="10px">
             <mat-checkbox [checked]="guessAge" (change)="guessAge = !guessAge" color="primary">Age</mat-checkbox>
             <mat-checkbox [checked]="guessGender" (change)="guessGender = !guessGender" color="primary">Gender</mat-checkbox>
+            <mat-checkbox [checked]="guessCeleb" (change)="guessCeleb = !guessCeleb" color="primary" matTooltipClass="my-tooltip"
+              matTooltip="Will find the closest looking celebrity from the dataset. The dataset currently has:&#13;
+                          Barack Obama&#13;
+                          Daniel Craig&#13;
+                          Scarlett Johansson&#13;
+                          Shakira&#13;
+                          Zac Efron">Celebrity</mat-checkbox>
         </div>
     </div>
   </div>
   <div *ngIf="!loading && faces.length > 0"  fxLayout="column" fxLayoutAlign="center" style="margin-top:50px">
       <hr style="width:100%; margin-bottom:30px">
-      <div style="text-align: center">
-          <h1>{{faces.length}} face(s) detected!</h1>
+      <div style="text-align: center; margin-bottom:15px">
+          <h1 class="statistics">— {{faces.length}} face(s) detected! —</h1>
           <div *ngIf="guessAge" fxLayout="row" fxLayoutAlign="center">
-            <h2 *ngFor="let last = last; let a of ages | keyvalue">{{a.value}} {{a.key}}<span *ngIf="!last">,&nbsp;</span></h2>
+            <h2 *ngFor="let last = last; let a of ages | keyvalue" class="statistics">{{a.value}} {{a.key}}<span *ngIf="!last">,&nbsp;</span></h2>
           </div>
           <div *ngIf="guessGender" fxLayout="row" fxLayoutAlign="center">
-            <h2 *ngFor="let last = last; let g of genders | keyvalue">{{g.value}} {{g.key}}<span *ngIf="!last">,&nbsp;</span></h2>
-          </div> 
+            <h2 *ngFor="let last = last; let g of genders | keyvalue" class="statistics">{{g.value}} {{g.key}}<span *ngIf="!last">,&nbsp;</span></h2>
+          </div>
+          <div *ngIf="guessCeleb" fxLayout="row" fxLayoutAlign="center">
+            <h2 *ngFor="let last = last; let g of celebs | keyvalue" class="statistics">{{g.value}} {{g.key}}<span *ngIf="!last">,&nbsp;</span></h2>
+          </div>  
       </div>
-      <div>
+      <div fxLayout="column" fxLayoutGap="30px">
         <div *ngFor="let im of faces" fxLayout="row">
           <div>
             <img width="300" height="150" src="{{im.src}}">
@@ -44,6 +54,7 @@
           <div style="align-self: center">
             <h3 *ngIf="guessAge && im.age"><span style="font-weight: bold;">Age: </span>{{im.age}} ({{im.ageConfidence}}% confident)</h3>
             <h3 *ngIf="guessGender && im.gender"><span style="font-weight: bold;">Gender: </span>{{im.gender}} ({{im.genderConfidence}}% confident)</h3>
+            <h3 *ngIf="guessCeleb && im.celeb"><span style="font-weight: bold;">Celebrity: </span>{{im.celeb}} ({{im.celebConfidence}}% confident)</h3>
           </div>
         </div>
       </div>
@@ -51,6 +62,6 @@
 </div>
 <div class="timers">
   <h4 *ngIf="faceTime">Detected faces in: {{faceTime}} second(s)</h4>
-  <h4 *ngIf="guessAge && ageTime">Detected ages in: {{ageTime}} second(s)</h4>
-  <h4 *ngIf="guessGender && genderTime">Detected genders in: {{genderTime}} second(s)</h4>
+  <h4 *ngIf="guessTime" [matTooltip]="getTimeInfo()" matTooltipClass="my-tooltip">Made guesses in: {{guessTime}} second(s)</h4>
+  <h4 *ngIf="!loading && faceTime">Total time taken: {{(faceTime + guessTime).toFixed(2)}} second(s)</h4>
 </div>
