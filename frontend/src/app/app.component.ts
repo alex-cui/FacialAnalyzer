@@ -11,7 +11,7 @@ export class AppComponent {
   public loading : boolean = false;
   public faces = [];
   public backendURL = "http://127.0.0.1:5000";
-  // public backendURL = "http://node0.alexcui-qv98630.cs179icloud-pg0.utah.cloudlab.us:30604";
+  public cloudURL = "http://128.110.154.173:30576";
 
   public ages = {};
   public genders = {};
@@ -20,6 +20,7 @@ export class AppComponent {
   public guessAge = true;
   public guessGender = true;
   public guessCeleb = true;
+  public useCloud = false;
 
   public faceTime = 0.00;
   public guessTime = 0.00;
@@ -30,6 +31,12 @@ export class AppComponent {
 
   constructor(private http: HttpClient) {}
   
+  public switchBackendURL() {
+      this.backendURL = this.useCloud
+        ? this.cloudURL 
+        : "http://127.0.0.1:5000";
+  }
+
   public uploadImage() {
     document.getElementById("hidden-button").click();
   }

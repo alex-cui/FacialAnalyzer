@@ -3,13 +3,12 @@
   <h1 matTooltip="Created by Alex Cui and Andrew Nguyen!">Facial Analyzer</h1>
   <div fxLayout="row" fxLayoutAlign="center">
     <!-- keep span for format -->
-    <span style="height:0px; width:100px; opacity:0"></span>
+    <span style="height:0px; width:110px; margin-right:15px; opacity:0"></span>
     <!--  -->
     <div fxLayout="column" fxLayoutGap="10px">
         <div class="image-container">
             <img width="450" height="300" id="img" name="image">
             <mat-spinner *ngIf="loading" class="spinner-color" style="position: absolute; margin-left:175px; margin-top:-200px"></mat-spinner>
-            <!-- src="sample.jpeg" -->
         </div>
         <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="center">
             <input id="hidden-button" style="display: none;" (change)="loadFile($event)" type="file" name="img" accept="image/*">
@@ -17,7 +16,8 @@
             <button id="detect" (click)="detect()" color="primary" mat-flat-button>Detect!</button>
         </div>
     </div>
-    <div class="filters">
+    <div class="filters" fxLayout="column" fxLayoutGap="15px">
+      <div class="box">
         <h3>Guess:</h3>
         <div fxLayout="column" fxLayoutGap="10px">
             <mat-checkbox [checked]="guessAge" (change)="guessAge = !guessAge" color="primary">Age</mat-checkbox>
@@ -30,6 +30,12 @@
                           Shakira&#13;
                           Zac Efron">Celebrity</mat-checkbox>
         </div>
+      </div>
+      <div class="box" fxLayout="row">
+        <h3 matTooltip="Determines whether to send requests to the local server, or the server in the cloud. The cloud will be considerably faster.">Cloud:</h3>
+        <mat-slide-toggle style="margin-left: 5px; align-self: center"
+          (change)="switchBackendURL()" color="accent" [(ngModel)]="useCloud"></mat-slide-toggle>
+      </div>
     </div>
   </div>
   <div *ngIf="!loading && faces.length > 0"  fxLayout="column" fxLayoutAlign="center" style="margin-top:50px">

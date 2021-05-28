@@ -10,6 +10,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {HttpClientModule} from '@angular/common/http';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { FormsModule } from '@angular/forms';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatCheckboxModule,
     MatProgressSpinnerModule,
     HttpClientModule,
-    MatTooltipModule
+    MatTooltipModule,
+    FormsModule,
+    MatSlideToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]
